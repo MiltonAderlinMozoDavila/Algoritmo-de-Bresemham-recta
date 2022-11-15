@@ -52,10 +52,10 @@ class cPunto
 
         /* ==================== MÉTODOS PROCESO ======================= */
         // ----------------------------------------------------------------
-        void Leer()
+        void Leer(string texto)
         {
-            cout << "INGRESAR DATOS DE PUNTO" << endl;
-            cout << "=======================" << endl;
+            cout << "INGRESAR DATOS DE PUNTO " <<texto<< endl;
+            cout << "=================================" << endl;
             cout << "Ingrese X: ";
             cin>>aX;
             cout << "Ingrese Y: ";

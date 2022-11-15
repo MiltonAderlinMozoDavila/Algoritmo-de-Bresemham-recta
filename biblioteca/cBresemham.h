@@ -12,7 +12,6 @@ class cBresemham
             cPunto *aPuntoInicial;
             cPunto *aPuntoFinal;
             int aNroPuntos;
-            int acaso;
 
         /* *********************** METODOS ************************ */
         public:
@@ -22,6 +21,7 @@ class cBresemham
         {
             aPuntoInicial = new cPunto();
             aPuntoFinal = new cPunto();
+            
         }
 
         // ----------------------------------------------------------------
@@ -30,7 +30,6 @@ class cBresemham
             
             aPuntoInicial = pPuntoInicial;
             aPuntoFinal = pPuntoFinal;
-            EvaluarPendiente();
         }
 
         /* ==================== MÉTODOS GET Y SET ======================= */
@@ -74,51 +73,65 @@ class cBresemham
 
         /* ==================== MÉTODOS PROCESO ======================= */
 
-        //  --- --------------- evaluar pendfloate ------------------
-        void EvaluarPendiente(){
+        //  --- --------------- evaluar pendiente ------------------
+        int EvaluarPendiente(){
+            //--- recuperar pendiente
+            float Pendiente = Getpendiente();
             int caso ;
-            //  --- si la pendfloate es menor a -1 (m < -1)
-            if(Getpendiente() < -1 )
+            //  --- si la pendiente  es menor a -1 ; (m < -1)
+            
+            if(Pendiente < -1 )
             {
-                acaso = 1;
+                cout << " m  =  "<<Pendiente << "  --->si la pendiente es menor a -1 (m < -1)  procesa Caso : 1" << endl;
+                caso = 1;
                 aNroPuntos = Get_DY()*3;
             }
                 
             else//entonces la pendiente es mayor a -1
             {
-                //  --- si la pendfloate esta en el rago <-1, 0> (-1 < m < 0)
-                if(Getpendiente() < 0 )
+                //  --- si la pendientes  esta en el rago <-1, 0> (-1 < m < 0)
+                if(Pendiente < 0 )
                 {
-                    acaso = 2;
+                    cout << " m  =  "<<Pendiente << "  --->la pendiente  esta en el rago <-1, 0> ; (-1 < m < 0)   procesa Caso : 1" << endl;
+                    caso = 2;
                     aNroPuntos = Get_DX()*3;
                 }
                     
                 else // entonces la pendiente es mayor a 0
                 {   
                     // si pendiente esta el el rango <0 , 1> ( 0 < m < 1)
-                    if(Getpendiente() < 1)
+                    if(Pendiente < 1)
                     {
-                        acaso = 3;
+                        cout << " m  =  "<<Pendiente << "   ---> pendiente esta el el rango <0 , 1> ;  ( 0 < m < 1)   procesa Caso : 1 " << endl;
+                        caso = 3;
                         aNroPuntos = Get_DX()*3;
                     }
 
                     else // --- entonces la pendiente es mayor 1 (m > 1)
                     {
-                        acaso = 4;
+                        cout << " m  =  "<<Pendiente << "  --->la pendiente es mayor 1 ;(m > 1)  procesa Caso : 1 " << endl;
+                        caso = 4;
                         aNroPuntos = Get_DY()*3;
                     }
                 }
 
             }
+            //--- retornar caso
+            return caso;
             
         }
+        
+        //  --- AQUI SE DESARRLLA EL ALGORITMO --- LE PUSE NOMOBRE GETPUNTOS PARA PODER MANIPULAR EXTERMAMENTE.
         //  --- obtener puntos de la grafica, esta funcion devuele un vector con los puntos de la grafica
         void GetPuntos(float *VectorPixel){
+            //  --- evaluar pendiente
+            int Caso = EvaluarPendiente();
 
             //  --- declarar variables
             float P;  // p: parametro de decicion
             float factorNorma = 0.001;
             float incrimento = 1;
+
             //  --- inicialicar variables
             float Xi = aPuntoInicial->GetX();
             float Yi = aPuntoInicial->GetY();
@@ -136,7 +149,7 @@ class cBresemham
             VectorPixel[i++] = 0*factorNorma;   //  coordena Z para opemGL; 
         
             //  --- evaluar la pendiente
-            switch (acaso)
+            switch (Caso)
             {
             //  --- si la pendfloate es menor a -1 (m < -1)
             case 1:
@@ -240,5 +253,19 @@ class cBresemham
 
             }
         }
+
+
+
+       //   --- Leer puntos
+       void LeerPuntos(){
+        //  --- Leer punto inicial
+        string rotulo;
+        rotulo ="ALGORITMO DE BRESEMHAM PARA GRAFICAR UNA RECTA\n====================================================\n \n INGRESE 2 PUNTOS PARA GRTAFICAR \n\n";
+        cout<<rotulo;
+        aPuntoInicial->Leer(" INICIAL");
+        cout<<"\n \n";
+        aPuntoFinal->Leer(" FINAL ");
+       } 
+
 };
 

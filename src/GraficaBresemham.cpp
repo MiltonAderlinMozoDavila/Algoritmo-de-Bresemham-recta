@@ -29,6 +29,26 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 int main()
 {
+
+    // Graficar puntos mediante el algoritmo de Bresemham
+    // ------------------------------------------------------------------
+    
+    /*
+    cPunto * puntoInicial = new cPunto(50,-200);
+    cPunto * puntoFinal = new cPunto(-800, 800);
+    cBresemham * B = new cBresemham(puntoInicial, puntoFinal);*/
+
+    //  --- Instanciat algoritmo de brensemham
+    cBresemham * B = new cBresemham();
+    //  --- leer puntos
+    B->LeerPuntos();
+    //  --- iniciar un nuevo vector para obtener los pixeles
+    float * vectorPuntos = new float[1000000];
+    //  --- obtener los puntos (pixeles para graficas x,y,z; con z= 0)
+    B->GetPuntos(vectorPuntos);
+    //  ---obtener tamaña del vecto que almacena los pixeles
+    int numeroPuntos = B->GetNroPuntos();
+    
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -39,7 +59,7 @@ int main()
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Bresemham - recta - Milton Mozo", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -101,21 +121,16 @@ int main()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    // Graficar puntos mediante el algoritmo de Bresemham
-    // ------------------------------------------------------------------
-    cPunto * puntoInicial = new cPunto(50,-200);
-    cPunto * puntoFinal = new cPunto(-800, 800);
-    cBresemham * B = new cBresemham(puntoInicial, puntoFinal);
-    cout<<B->Getpendiente();
-    //  --- vector de puntos
-    int numeroPuntos = B->GetNroPuntos();
-    float * vectorPuntos = new float[100000000];
-    B->GetPuntos(vectorPuntos);
+    /*
+    en esta seccion se determina todos los puntos
+    */
     //  --- puntos
-    float ventices[100000];
-    for( int i=0; i<= numeroPuntos; i++){
-        ventices[i]=vectorPuntos[i];
+    float Puntos[10000];
+    for( int i = 0; i <= numeroPuntos ; i++){
+        Puntos[i] = vectorPuntos[i];
     }
+
+    
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -125,7 +140,7 @@ int main()
 
     // 0. copy our vertices array in a buffer for OpenGL to use
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(ventices), ventices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Puntos), Puntos, GL_STATIC_DRAW);
     // 1. then set the vertex attributes pointers
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -174,7 +189,7 @@ int main()
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
-    
+    delete B;
     glfwTerminate();
     return 0;
 }
